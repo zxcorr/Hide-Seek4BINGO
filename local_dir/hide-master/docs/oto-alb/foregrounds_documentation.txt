@@ -1,0 +1,7 @@
+AME (anomalous microwave emission) = emissão anomala de micro-ondas (poeira térmica)
+CMB (cosmic microwave background) = radiação cósmica de fundo
+free free = Bremsstrahlung (freiamente de elétrons)
+point sources = fontes extragalaticas pontuais
+synchrotron = interação entre elétrons e campo magnético
+ 
+

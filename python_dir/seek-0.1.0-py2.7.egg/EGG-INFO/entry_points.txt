@@ -1,0 +1,3 @@
+[console_scripts]
+seek = ivy.cli.main:run
+
