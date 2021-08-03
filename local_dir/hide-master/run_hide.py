@@ -42,7 +42,7 @@ working_path = os.getcwd() + "/hide/config/"
 # HORNS AZIMUTH AND ALTITUDE (ELEVATION)
 # ==================================================================
 
-az_in = np.loadtxt('azimuth.txt')  # one horn -- one azimuth [degree]       
+az_in = np.loadtxt('azimuth.txt')  # one hor    n -- one azimuth [degree]       
 al_in = np.loadtxt('altitude.txt') # one horn -- one altitude [degree]
 
 # ==================================================================
@@ -59,7 +59,12 @@ for i in range(0, az_in.size):
             destination.write('coordinate_file_fmt = "coord_bingo_' + 
                              str(i) + '_' + '%s.txt"' + '\n') 
                              # coordinates file name for each horn
-
+        
+        elif line == 'params_file_fmt\n':
+            destination.write('params_file_fmt = "params_bingo_' + 
+                             str(i) + '_' + '{}.txt"'.format(i) + '\n') 
+                             # params file name for each horn
+        
         elif line == 'mode\n':
             destination.write('mode = ' + str(i) + '\n')  
                              # horn suffix             
@@ -134,6 +139,7 @@ for i in range(0, az_in.size):
 # ==================================================================
 
 for i in range(0, az_in.size):
+    print("\nExecuting horn {0}\n".format(i))
     os.system('sudo cp ' + working_path + 'bingo_horn_' + str(i) + '.py' + ' ' + destination_path)
     os.system('hide hide.config.' + dfile_short + '_' + str(i)) # run hide
 

@@ -41,7 +41,7 @@ bingo_model = 1 # either 1 or 2
 # ==================================================================
 
 destination_path = "/usr/local/lib/python2.7/dist-packages/seek-0.1.0-py2.7.egg/seek/config/" #'~/anaconda2/lib/python2.7/site-packages/seek-0.1.0-py2.7.egg/seek/config/' # change to your destination (the place where your hide package is located within your python repository)
-out_path = "/home/otobone/Documentos/ic/projeto_karin/resultados/healpix_seek/drectangular/0d/"
+output_path = "/home/otobone/Documentos/ic/projeto_karin/resultados/healpix_seek/white_noise_1f_test/fwhm0_011/-2d/nside_128/temp_50/fknee1mhz/beta0_5/"
 working_path = os.getcwd() + "/seek/config/"   #'/home/lucas/Documentos/work/seektest/seek/seek/config/' # change to your working path
 
 # ==================================================================
@@ -55,8 +55,13 @@ for i in range(0, number_horns):
     source = open(working_path + 'bingo.py', 'r')
     for line in source:
         if line == 'map_name\n':
-            destination.write('map_name = "'+ out_path + 'bingo_maps_horn_' + str(i) + '.hdf"' + '\n')    #destination.write('map_name = "bingo_maps_horn_' + str(i) + '.hdf"' + '\n')
+            destination.write('map_name = "'+ output_path + 'bingo_maps_horn_' + str(i) + '.hdf"' + '\n')    
+            #destination.write('map_name = "bingo_maps_horn_' + str(i) + '.hdf"' + '\n')
                              # map file name for each horn -- output
+
+        elif line == 'params_file_fmt\n':
+            destination.write('params_file_fmt = "params_bingo_' + str(i) + '_' + '{}.txt"' + '\n') 
+                             # params file name for each horn
 
         elif line == 'data_file_prefix\n':
             destination.write('data_file_prefix = "bingo_tod_horn_' + str(i) + '_"' + '\n') 
@@ -84,5 +89,6 @@ for i in range(0, number_horns):
 # ==================================================================
 
 for i in range(0, number_horns):
+    print("\nExecuting horn {}\n".format(i))
     os.system('sudo cp ' + working_path + 'bingo_horn_' + str(i) + '.py' + ' ' + destination_path)	 
     os.system('seek seek.config.' + dfile_short + '_' + str(i)) # run seek

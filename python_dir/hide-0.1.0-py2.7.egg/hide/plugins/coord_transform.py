@@ -59,6 +59,7 @@ class Plugin(BasePlugin):
             
             plot=False
             if plot:
+                
                 plot_beam(beam_spec, coord_ra, coord_dec, rphis, rthetas, ras, decs)
                 
         self.ctx.beams = beams

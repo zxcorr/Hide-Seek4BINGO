@@ -17,6 +17,11 @@ Created on October, 2018
 
 author: Lucas Olivari
 
+Modified on July, 2021
+
+authors: João A. M. Barretos, Carlos H. N. Otobone
+
+
 Config file that specifies parameters specific for the FFT spectrometer.
 '''
 
@@ -51,6 +56,7 @@ plugins = ["seek.plugins.find_nested_files",
                                      "seek.plugins.map_indicies",
                                      "seek.plugins.reduce_maps"),
             "seek.plugins.write_maps",
+            "seek.plugins.write_params",
             "ivy.plugin.show_stats",
             ]
 
@@ -62,12 +68,16 @@ verbose = True
 cpu_count = 1
 backend = "sequential"
 
+script_filename = os.path.realpath(__file__)
+
 # ==================================================================
 # OUTPUT
 # ==================================================================
-overwrite = True            # True if file should be overwritten
+overwrite = False            # True if file should be overwritten
 map_name
         # map file name format -- it will be written by run_seek.py
+params_file_fmt
+        # params file format -- it will be written by run_seek.py
 
 # ==================================================================
 # TELESCOPE
@@ -83,12 +93,12 @@ telescope_elevation = 0.   # altitude
 # ==================================================================
 # DATA LOADING
 # ==================================================================
-file_prefix = "/home/otobone/Documentos/ic/projeto_karin/resultados/TOD/freq_bingo/drectangular_2d/"                # location of the tod data
+file_prefix = "/home/otobone/Documentos/ic/projeto_karin/resultados/TOD/freq_bingo/white_noise_1f_test/fwhm0_011/2d/nside_128/temp_50/"                # location of the tod data
 strategy_start = "2018-01-01-00:00:00"      # survey start time. Format YYYY-mm-dd-HH:MM:SS
-strategy_end   = "2018-01-03-23:59:59"      # survey end time. Format YYYY-mm-dd-HH:MM:SS
+strategy_end   = "2018-01-01-23:59:59"      # survey end time. Format YYYY-mm-dd-HH:MM:SS
 file_date_format = "%Y%m%d_%H%M%S"          # Format of date part of file name
 integration_time = 1                       # no of pixel to use for integration in time (axis=1)
-max_frequency = 1260.
+max_frequency = 1270.
 min_frequency = 980.
 integration_frequency = 1                   # no of pixel to use for integration in freq (axis=0)
 
@@ -148,7 +158,7 @@ cleaner = "seek.mitigation.sum_threshold"
 mask_freqs = ()             # choose the frequencies to be masked
 
 # ---------------------------
-# SUM THRESHOLD
+# SUM THRESHOLD                                                                 PERGUNTAR PARA O FILIPE
 # ---------------------------
 chi_1 = 6                    # First threshold value 
 sm_kernel_m = 40             # Smoothing, kernel window size in axis=1

@@ -59,7 +59,7 @@ def write_data(ctx, tod_key, Pname, P2name = None):
     :param P2name: group name for kurtosis data (None at the moment)
     """
     mod = importlib.import_module(ctx.params.instrument)
-    if hasattr(mod, "convert_frequencies"):
+    if hasattr(mod, "convert_frequencies") and False:                               # CONVERSAO DO ESPECTROMETRO DESATIVADA!!!
         freq = mod.convert_frequencies(ctx.frequencies)
     else:
         freq = ctx.frequencies

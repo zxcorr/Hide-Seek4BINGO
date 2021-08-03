@@ -16,11 +16,17 @@
 Created on August, 2018
 
 author: Lucas Olivari
+
+Modified on July, 2021
+
+authors: João A. M. Barretos, Carlos H. N. Otobone
 '''
 
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 from ivy.plugin.parallel_plugin_collection import ParallelPluginCollection
+
+import os
 
 ####################################################################
 #### THIS IS THE CONFIGURATION FILE THAT WILL SIMULATE BINGO
@@ -54,7 +60,7 @@ plugins = ["hide.plugins.initialize",
                                      ],
                                     "hide.plugins.map_strategy_plugin",
                                     ),
-           
+            "hide.plugins.write_params",
             "ivy.plugin.show_summary_stats"
           ]
 
@@ -67,13 +73,17 @@ cpu_count = 1
 backend = "sequential"
 speed_of_light = 299792458          # [m/s]
 
+script_filename = os.path.realpath(__file__)
+
 # ==================================================================
 # OUTPUT
 # ==================================================================
-output_path = "/home/otobone/Documentos/ic/projeto_karin/resultados/TOD/freq_bingo/drectangular_2d/"  # path to output folder
+output_path = "/home/otobone/Documentos/ic/projeto_karin/resultados/TOD/freq_bingo/beam_point_source/gaussian/1024/central_offset/"  # path to output folder
 overwrite = False
 file_fmt = "bingo_tod_horn_{mode}_{date}.h5"     # tod file's name 
 coordinate_file_fmt
+                   # it will be written by run_hide.py
+params_file_fmt
                    # it will be written by run_hide.py
 mode
                    # it will be written by run_hide.py
@@ -98,24 +108,25 @@ telescope_elevation = 0.0        # altitude
 # ==================================================================
 # BEAM
 # ==================================================================
-beam_profile_provider = "hide.beam.gaussian"                          #futuro: hide.beam.GRASP
+beam_profile_provider = "hide.beam.gaussian_fwhm"  
 beam_frequency_min = 980.       # minimum frequency: [MHz]
-beam_frequency_max = 1270.      # maximum frequency: [MHz]            #last point discarted
+beam_frequency_max = 1260.      # maximum frequency: [MHz]            #last point discarted
 beam_frequency_pixscale = 10.    # pixel scale (frequency/beam)
-dish_diameter = 25.             # effective diameter of the dish [m]
-beam_nside = 128                 # healpix NSIDE -- must be the same as that of the input sky maps
+dish_diameter = 40.             # effective diameter of the dish [m]
+fwhm_0 = 0.011                  # FWHM relative to the first (least) frequency
+beam_nside = 1024                 # healpix NSIDE -- must be the same as that of the input sky maps
 beam_response = 1               # beam response [0..1]
 
-beam_elevation = 10.            # elevation [degree] -- to calculate the beam area (not physical, just to find the pixels for calculation -- it doesn't affect the results significantly)
-beam_azimut = 10.               # azimuth [degree] -- same as above
+beam_elevation = 1          # elevation [degree] -- to calculate the beam area (not physical, just to find the pixels for calculation -- it doesn't affect the results significantly)
+beam_azimut = 1               # azimuth [degree] -- same as above
 
 
 # ==================================================================
 # SCANNING STRATEGY
 # ==================================================================
 scanning_strategy_provider = "hide.strategy.drift_scan" 
-strategy_start = "2018-01-03-00:00:00"     # survey start time. Format YYYY-mm-dd-HH:MM:SS
-strategy_end   = "2018-01-03-23:59:59"     # survey end time. Format YYYY-mm-dd-HH:MM:SS
+strategy_start = "2018-01-01-00:00:00"     # survey start time. Format YYYY-mm-dd-HH:MM:SS
+strategy_end   = "2018-01-01-23:59:59"     # survey end time. Format YYYY-mm-dd-HH:MM:SS
 strategy_step_size = 1                    # size of step in [sec]
 time_range = 60*60                        # time range per file [sec]
 coord_step_size = 1                        # step size in the coords file
@@ -137,8 +148,8 @@ altitude_max_pos = 90.0                    # max position in altitude direction 
 # ASTRO (SIGNAL)
 # ==================================================================
 astro_signal_provider = "hide.astro.hi_sky"    # it will read the SKY maps
-astro_signal_file_name = "ame_cube_test.fits" #"synch_cube_hs_test_rot.fits" # maps (n_channels vs n_pixels) file name, located in the data/sky directory         #"maps_foregrounds_test.fits"
-astro_signal_freq_file_name = "freqs_bingo.fits" # frequency (n_channels) file name, located in the data/sky directory           #"freqs_foregrounds_test.fits"
+astro_signal_file_name = "central_offset_point_source_1024.fits" #"synch_cube_hs_test_rot.fits" # maps (n_channels vs n_pixels) file name, located in the data/sky directory
+astro_signal_freq_file_name = "freqs_bingo.fits" # frequency (n_channels) file name, located in the data/sky directory       
 
 cache_astro_signals = True         # flag if loaded signals per frequency should be kept in memory
 
@@ -160,11 +171,11 @@ elevation_model = [0., 0., 0.] # chose [1, -1., 1.] for model 1 and [1.26321397e
 # ==================================================================
 # NOISE -- HARPER ET AL. (2018) MODEL
 # ==================================================================
-load_noise_template = True                                                    # load_noise_template = True
-temp_sys = 0                    # system temperature, in K                   # temp_sys = 0.0
+load_noise_template = False
+temp_sys = 0.0                   # system temperature, in K                   
 delta_nu = (28/3)*1e6                   # channel width, in Hz
-color_alpha = 0.5                  # 1 /f alpha parameter
-color_fknee = 5.0                 # 1/ f knee frequency, in Hz
+color_alpha = 0.0                  # 1 /f alpha parameter    
+color_fknee = 0.001                 # 1/ f knee frequency, in Hz
 color_beta = 0.5                 # 1 / f beta parameter (0.001 - 1)
 sample_freq = 1.0                 # telescope sample rate, in Hz
 

@@ -233,8 +233,8 @@ def _get_data_from_hdf5(path, m9703a_mode):
     :returns tod, frequencies: data and the frequency of the data
     """
     with h5py.File(path, "r") as fp:
-        p_phase0 = fp["P/Phase0"][()]
-        p_phase1 = fp["P/Phase1"][()]
+        p_phase0 = fp["P/Phase0"].value
+        p_phase1 = fp["P/Phase1"].value
 
         if m9703a_mode == MODE_PHASE_SWITCH:
             tod = p_phase1 - p_phase0
@@ -243,8 +243,8 @@ def _get_data_from_hdf5(path, m9703a_mode):
         else:
             raise TypeError("Unsupported M9703A_MODE: '%s'"%m9703a_mode)
         
-        frequencies = fp[FREQUENCIES_KEY][()]
-        time_axis = fp[TIME_KEY][()]
+        frequencies = fp[FREQUENCIES_KEY].value
+        time_axis = fp[TIME_KEY].value
     date = get_observation_start_from_hdf5(path)
     date_in_h = date.hour + date.minute / 60 + date.second / 3600
     time_axis = date_in_h + 1. / 3600 * time_axis
@@ -262,10 +262,10 @@ def _get_spectral_kurtosis_mask(path, accumulations, accumulation_offset):
     :return: kurtosis-based RFI mask
     """
     with h5py.File(path, "r") as fp:
-        p_phase0 = fp["P/Phase0"][()]
-        p_phase1 = fp["P/Phase1"][()]
-        p2_phase0 = fp["P2/Phase0"][()]
-        p2_phase1 = fp["P2/Phase1"][()]
+        p_phase0 = fp["P/Phase0"].value
+        p_phase1 = fp["P/Phase1"].value
+        p2_phase0 = fp["P2/Phase0"].value
+        p2_phase1 = fp["P2/Phase1"].value
         mask = spectral_kurtosis_mask(p_phase0, 
                                       p_phase1, 
                                       p2_phase0, 
